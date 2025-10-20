@@ -1,13 +1,11 @@
 package ru.practicum.shareit.user.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
@@ -42,14 +40,18 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public boolean existsByEmail(String email) {
         return storage.values().stream()
-                .anyMatch(u -> u.getEmail() != null && u.getEmail().equalsIgnoreCase(email));
+                .anyMatch(u -> u.getEmail().equalsIgnoreCase(email));
     }
 
     @Override
     public boolean existsByEmailForOther(String email, Long excludeId) {
         return storage.values().stream()
                 .anyMatch(u -> !u.getId().equals(excludeId)
-                        && u.getEmail() != null
                         && u.getEmail().equalsIgnoreCase(email));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return storage.containsKey(id);
     }
 }
