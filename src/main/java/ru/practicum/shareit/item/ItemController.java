@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -29,9 +32,15 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemDto> create(@RequestHeader(USER_HEADER) Long userId,
-                                          @RequestBody ItemDto dto) {
+                                          @RequestBody /*@Valid*/ ItemDto dto) {
         ItemDto created = service.create(userId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @GetMapping("/search")
+    public List<ItemDto> search(@RequestParam("text") String text) {
+        if (text == null || text.isBlank()) return List.of(); // важно для тестов
+        return service.search(text);
     }
 
     @PatchMapping("/{itemId}")
@@ -52,8 +61,12 @@ public class ItemController {
         return service.getOwnerItems(userId);
     }
 
-    @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam("text") String text) {
-        return service.search(text);
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<ItemDto.CommentDto> addComment(@RequestHeader(USER_HEADER) Long userId,
+                                                         @PathVariable Long itemId,
+                                                         @RequestBody Map<String, String> body) {
+        String text = body != null ? body.get("text") : null;
+        ItemDto.CommentDto created = service.addComment(userId, itemId, text);
+        return ResponseEntity.ok(created);
     }
 }
