@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -28,15 +29,17 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto create(final Long ownerId, final ItemDto dto) {
         requireUserExists(ownerId);
 
+        if (dto.getName() == null || dto.getName().isBlank()) {
+            throw new BadRequestException("name обязателен");
+        }
+        if (dto.getDescription() == null) {
+            throw new BadRequestException("description обязателен");
+        }
+        if (dto.getAvailable() == null) {
+            throw new BadRequestException("available обязателен");
+        }
+
         Item item = ItemMapper.fromDto(dto, ownerId, null);
-
-        if (item.getName() == null) {
-            item.setName("");
-        }
-        if (item.getDescription() == null) {
-            item.setDescription("");
-        }
-
         Item saved = itemRepository.save(item);
         return ItemMapper.toItemDto(saved);
     }
@@ -75,6 +78,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getOwnerItems(final Long ownerId) {
+        requireUserExists(ownerId);
         return itemRepository.findByOwner(ownerId).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -85,7 +89,6 @@ public class ItemServiceImpl implements ItemService {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
-
         return itemRepository.searchByText(text).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
