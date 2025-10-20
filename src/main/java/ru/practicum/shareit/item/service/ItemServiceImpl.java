@@ -29,6 +29,14 @@ public class ItemServiceImpl implements ItemService {
         requireUserExists(ownerId);
 
         Item item = ItemMapper.fromDto(dto, ownerId, null);
+
+        if (item.getName() == null) {
+            item.setName("");
+        }
+        if (item.getDescription() == null) {
+            item.setDescription("");
+        }
+
         Item saved = itemRepository.save(item);
         return ItemMapper.toItemDto(saved);
     }
@@ -67,8 +75,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getOwnerItems(final Long ownerId) {
-        requireUserExists(ownerId);
-
         return itemRepository.findByOwner(ownerId).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -79,6 +85,7 @@ public class ItemServiceImpl implements ItemService {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
+
         return itemRepository.searchByText(text).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
