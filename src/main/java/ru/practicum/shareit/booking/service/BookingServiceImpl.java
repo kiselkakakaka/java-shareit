@@ -112,12 +112,12 @@ public class BookingServiceImpl implements BookingService {
             };
         } else {
             return switch (s) {
-                case "CURRENT" -> bookings.findByItem_OwnerAndStartBeforeAndEndAfter(id, now, now, SORT_DESC);
-                case "PAST"    -> bookings.findByItem_OwnerAndEndBefore(id, now, SORT_DESC);
-                case "FUTURE"  -> bookings.findByItem_OwnerAndStartAfter(id, now, SORT_DESC);
-                case "WAITING" -> bookings.findByItem_OwnerAndStatus(id, BookingStatus.WAITING, SORT_DESC);
-                case "REJECTED"-> bookings.findByItem_OwnerAndStatus(id, BookingStatus.REJECTED, SORT_DESC);
-                case "ALL"     -> bookings.findByItem_Owner(id, SORT_DESC);
+                case "CURRENT" -> bookings.findByItem_Owner_IdAndStartBeforeAndEndAfter(id, now, now, SORT_DESC);
+                case "PAST"    -> bookings.findByItem_Owner_IdAndEndBefore(id, now, SORT_DESC);
+                case "FUTURE"  -> bookings.findByItem_Owner_IdAndStartAfter(id, now, SORT_DESC);
+                case "WAITING" -> bookings.findByItem_Owner_IdAndStatus(id, BookingStatus.WAITING, SORT_DESC);
+                case "REJECTED"-> bookings.findByItem_Owner_IdAndStatus(id, BookingStatus.REJECTED, SORT_DESC);
+                case "ALL"     -> bookings.findByItem_Owner_Id(id, SORT_DESC);
                 default -> throw new BadRequestException("Unknown state: " + s);
             };
         }

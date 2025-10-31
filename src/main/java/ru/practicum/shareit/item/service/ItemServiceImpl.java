@@ -1,19 +1,22 @@
 package ru.practicum.shareit.item.service;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -122,7 +125,7 @@ public class ItemServiceImpl implements ItemService {
             throw new BadRequestException("Оставлять комментарии могут только пользователи с завершённым бронированием этой вещи");
         }
 
-        ru.practicum.shareit.item.model.Comment newComment = ru.practicum.shareit.item.model.Comment.builder()
+        var newComment = ru.practicum.shareit.item.model.Comment.builder()
                 .text(text)
                 .item(item)
                 .author(user)
