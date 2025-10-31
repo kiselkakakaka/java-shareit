@@ -1,16 +1,13 @@
 package ru.practicum.shareit.item.model;
 
-import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import ru.practicum.shareit.user.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.request.model.ItemRequest;
 
-@Entity
-@Table(name = "items")
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @Id
