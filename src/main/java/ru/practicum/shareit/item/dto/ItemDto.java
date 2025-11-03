@@ -2,22 +2,29 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class ItemDto {
     private Long id;
+
+    @NotBlank(message = "name must not be blank")
     private String name;
+
     private String description;
+
+    @NotNull(message = "available must not be null")
     private Boolean available;
+
     private Long requestId;
 
     private BookingShort lastBooking;
     private BookingShort nextBooking;
 
-    private List<CommentDto> comments = new ArrayList<>();
+    private List<CommentDto> comments;
 
     @Data
     public static class BookingShort {
