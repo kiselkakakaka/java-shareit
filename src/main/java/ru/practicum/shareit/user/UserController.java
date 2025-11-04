@@ -25,9 +25,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserDto dto) {
-        UserDto created = service.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public UserDto create(@RequestBody /*@Valid*/ UserDto dto) {
+        return service.create(dto);
     }
 
     @PatchMapping("/{id}")
