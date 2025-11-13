@@ -1,20 +1,16 @@
 package ru.practicum.shareit.booking.dto;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import ru.practicum.shareit.booking.validation.StartBeforeEnd;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@StartBeforeEnd
 public class BookItemRequestDto {
-	private long itemId;
-	@FutureOrPresent
-	private LocalDateTime start;
-	@Future
-	private LocalDateTime end;
+    @NotNull private Long itemId;
+    @NotNull @Future private LocalDateTime start;
+    @NotNull @Future private LocalDateTime end;
 }
