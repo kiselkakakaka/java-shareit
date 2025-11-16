@@ -10,23 +10,45 @@ import ru.practicum.shareit.user.model.User;
 @UtilityClass
 public class BookingMapper {
 
-    public Booking toModel(BookingShortDto dto, User booker, Item item) {
-        Booking b = new Booking();
-        b.setStart(dto.getStart());
-        b.setEnd(dto.getEnd());
-        b.setBooker(booker);
-        b.setItem(item);
-        return b;
+    public Booking toModel(BookingShortDto bookingShortDto, User booker, Item item) {
+        if (bookingShortDto == null || booker == null || item == null) {
+            return null;
+        }
+
+        Booking booking = new Booking();
+        booking.setStart(bookingShortDto.getStart());
+        booking.setEnd(bookingShortDto.getEnd());
+        booking.setBooker(booker);
+        booking.setItem(item);
+
+        return booking;
     }
 
-    public BookingDto toDto(Booking b) {
+    public BookingDto toDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
+
+        BookingDto.BookerShortDto bookerShortDto = null;
+        if (booking.getBooker() != null) {
+            bookerShortDto = new BookingDto.BookerShortDto(booking.getBooker().getId());
+        }
+
+        BookingDto.ItemShortDto itemShortDto = null;
+        if (booking.getItem() != null) {
+            itemShortDto = new BookingDto.ItemShortDto(
+                    booking.getItem().getId(),
+                    booking.getItem().getName()
+            );
+        }
+
         return BookingDto.builder()
-                .id(b.getId())
-                .start(b.getStart())
-                .end(b.getEnd())
-                .status(b.getStatus())
-                .booker(new BookingDto.BookerShortDto(b.getBooker().getId()))
-                .item(new BookingDto.ItemShortDto(b.getItem().getId(), b.getItem().getName()))
+                .id(booking.getId())
+                .start(booking.getStart())
+                .end(booking.getEnd())
+                .status(booking.getStatus())
+                .booker(bookerShortDto)
+                .item(itemShortDto)
                 .build();
     }
 }

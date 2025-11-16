@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDto {
+
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
@@ -20,9 +21,18 @@ public class BookingDto {
     private BookerShortDto booker;
     private ItemShortDto item;
 
-    @Data @NoArgsConstructor @AllArgsConstructor
-    public static class BookerShortDto { private Long id; }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookerShortDto {
+        private Long id;
+    }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
-    public static class ItemShortDto { private Long id; private String name; }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ItemShortDto {
+        private Long id;
+        private String name;
+    }
 }
